@@ -19,19 +19,12 @@ namespace Medea
             _client.MessageReceived += CommandHandler;
             _client.Log += Log;
 
-            //  You can assign your bot token to a string, and pass that in to connect.
-            //  This is, however, insecure, particularly if you plan to have your code hosted in a public repository.
             var token = File.ReadAllText("token.txt");
 
-            // Some alternative options would be to keep your token in an Environment Variable or a standalone file.
-            // var token = Environment.GetEnvironmentVariable("NameOfYourEnvironmentVariable");
-            // var token = File.ReadAllText("token.txt");
-            // var token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
 
-            // Block this task until the program is closed.
             await Task.Delay(-1);
         }
 
@@ -43,15 +36,13 @@ namespace Medea
 
         private Task CommandHandler(SocketMessage message)
         {
-            //variables
             string command = "";
             int lengthOfCommand = -1;
 
-            //filtering messages begin here
-            if (!message.Content.StartsWith('?')) //This is your prefix
+            if (!message.Content.StartsWith('?'))
                 return Task.CompletedTask;
 
-            if (message.Author.IsBot) //This ignores all commands from bots
+            if (message.Author.IsBot)
                 return Task.CompletedTask;
 
             if (message.Content.Contains(' '))
@@ -61,7 +52,6 @@ namespace Medea
 
             command = message.Content.Substring(1, lengthOfCommand - 1).ToLower();
 
-            //Commands begin here
             if (command.Equals("hello"))
             {
                 message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
@@ -69,6 +59,27 @@ namespace Medea
             else if (command.Equals("age"))
             {
                 message.Channel.SendMessageAsync($@"Your account was created at {message.Author.CreatedAt.DateTime.Date}");
+            }
+            else if ((command.Equals("meta") || command.Equals("metadata")) && message.Reference != null)
+            {
+                IMessage refmsg = message.Channel.GetMessageAsync(message.Reference.MessageId.Value).Result;
+                if (refmsg.Attachments.Count > 0)
+                {
+                    IEnumerator<Discord.IAttachment> enumattach = refmsg.Attachments.GetEnumerator();
+                    enumattach.MoveNext();
+                    message.Channel.SendMessageAsync(
+                        $@"Metadata for first attachment in the referenced message:
+```
+Filename: {enumattach.Current.Filename}
+Width:    {enumattach.Current.Width}px
+Height:   {enumattach.Current.Height}px
+Size:     {(enumattach.Current.Size / (1024.0 * 1024)).ToString("0.##")}MB
+```", false, null, null, null, new MessageReference(message.Id));
+                }
+                else
+                {
+                    message.Channel.SendMessageAsync("The message you referenced does not have any attachments!", false, null, null, null, new MessageReference(message.Id));
+                }
             }
 
             return Task.CompletedTask;
