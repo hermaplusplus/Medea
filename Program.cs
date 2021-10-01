@@ -73,7 +73,7 @@ namespace Medea
 Filename: {enumattach.Current.Filename}
 Width:    {enumattach.Current.Width}px
 Height:   {enumattach.Current.Height}px
-Size:     {(enumattach.Current.Size / (1024.0 * 1024)).ToString("0.#")}MB
+Size:     {(enumattach.Current.Size / (1024.0 * 1024)).ToString("0.##")}MB
 ```", false, null, null, null, new MessageReference(message.Id));
                 }
                 else
