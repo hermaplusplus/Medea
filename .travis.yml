@@ -1,0 +1,9 @@
+﻿language: csharp
+mono: none
+dotnet: 5.0.104
+
+install:
+ - dotnet restore
+
+script:
+ - dotnet build
