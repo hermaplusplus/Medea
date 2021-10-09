@@ -20,7 +20,7 @@ namespace Medea
             _client.UserJoined += JoinHandler;
             _client.Log += Log;
 
-            var token = File.ReadAllText("token.txt");
+            var token = File.ReadAllLines("token.txt")[0];
 
 
             await _client.LoginAsync(TokenType.Bot, token);
