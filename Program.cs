@@ -17,6 +17,7 @@ namespace Medea
         {
             _client = new DiscordSocketClient();
             _client.MessageReceived += CommandHandler;
+            _client.UserJoined += JoinHandler;
             _client.Log += Log;
 
             var token = File.ReadAllText("token.txt");
@@ -80,6 +81,18 @@ Size:     {(enumattach.Current.Size / (1024.0 * 1024)).ToString("0.##")}MB
                 {
                     message.Channel.SendMessageAsync("The message you referenced does not have any attachments!", false, null, null, null, new MessageReference(message.Id));
                 }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private Task JoinHandler(SocketGuildUser user)
+        {
+            user.SendMessageAsync($@"Welcome to **{user.Guild.Name}**!");
+            
+            if (File.Exists($@"./res/guildjoin/{user.Guild.Id}.txt"))
+            {
+                user.SendMessageAsync(File.ReadAllText($@"./res/guildjoin/{user.Guild.Id}.txt"));
             }
 
             return Task.CompletedTask;
