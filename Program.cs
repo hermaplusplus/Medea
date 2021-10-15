@@ -65,47 +65,54 @@ namespace Medea
             {
                 if (message.MentionedUsers.Count > 0)
                 {
-                    IEnumerator<SocketUser> enummentions = message.MentionedUsers.GetEnumerator();
+                    IEnumerator<SocketUser> enumMentions = message.MentionedUsers.GetEnumerator();
                     for (int i = 0; i < message.MentionedUsers.Count; i++)
                     {
-                        enummentions.MoveNext();
+                        enumMentions.MoveNext();
 
-                        EmbedBuilder emb = new EmbedBuilder
-                        {
-                            Title = $@"User Info for {enummentions.Current.Mention}"
-                        };
-
-                        emb
-                            .AddField("Username & Tag", $@"{enummentions.Current.Username}#{enummentions.Current.Discriminator}", true)
-                            .AddField("User ID", $@"{enummentions.Current.Id}", true)
-                            .AddField("Avatar URL", $@"[Click Me!]({enummentions.Current.GetAvatarUrl()})", true)
-                            .AddField("Date & Time Created", $@"<t:{enummentions.Current.CreatedAt.ToUnixTimeSeconds()}:F>")
-                            .WithThumbnailUrl(enummentions.Current.GetAvatarUrl())
-                            .WithAuthor(message.Author as IUser)
-                            .WithCurrentTimestamp();
-
-                        UserProperties userProperties = enummentions.Current.PublicFlags.Value;
-                        string flagList = "";
-                        if (!userProperties.HasFlag(UserProperties.None))
-                        {
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.BugHunterLevel1) ? "Bug Hunter Level 1,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.BugHunterLevel2) ? "Bug Hunter Level 2,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.DiscordCertifiedModerator) ? "Certified Moderator,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.EarlySupporter) ? "Early Supporter,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.EarlyVerifiedBotDeveloper) ? "Early Verified Bot Dev,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBalance) ? "HypeSquad Balance,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBravery) ? "HypeSquad Bravery,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBrilliance) ? "Hypesquad Brilliance,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadEvents) ? "HypeSquad Event Member,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.Partner) ? "Discord Partner Server Owner,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.Staff) ? "Discord Employee,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.System) ? "Discord System,\n" : "");
-                            String.Concat(flagList, userProperties.HasFlag(UserProperties.VerifiedBot) ? "Verified Bot,\n" : "");
-                            emb.AddField("Public Flags", flagList);
-                        }
-
-                        message.Channel.SendMessageAsync(null, false, emb.Build(), null, null, message.Reference);
+                        UserInfo(enumMentions.Current);
                     }
+                }
+
+                UserInfo(message.Author);
+
+                void UserInfo(SocketUser su)
+                {
+                    EmbedBuilder emb = new EmbedBuilder
+                    {
+                        Title = $@"User Info for {su.Mention}"
+                    };
+
+                    emb
+                        .AddField("Username & Tag", $@"{su.Username}#{su.Discriminator}", true)
+                        .AddField("User ID", $@"{su.Id}", true)
+                        .AddField("Avatar URL", $@"[Click Me!]({su.GetAvatarUrl()})", true)
+                        .AddField("Date & Time Created", $@"<t:{su.CreatedAt.ToUnixTimeSeconds()}:F>")
+                        .WithThumbnailUrl(su.GetAvatarUrl())
+                        .WithAuthor(message.Author as IUser)
+                        .WithCurrentTimestamp();
+
+                    UserProperties userProperties = su.PublicFlags.Value;
+                    string flagList = "";
+                    if (!userProperties.HasFlag(UserProperties.None))
+                    {
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.BugHunterLevel1) ? "Bug Hunter Level 1,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.BugHunterLevel2) ? "Bug Hunter Level 2,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.DiscordCertifiedModerator) ? "Certified Moderator,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.EarlySupporter) ? "Early Supporter,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.EarlyVerifiedBotDeveloper) ? "Early Verified Bot Dev,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBalance) ? "HypeSquad Balance,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBravery) ? "HypeSquad Bravery,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadBrilliance) ? "Hypesquad Brilliance,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.HypeSquadEvents) ? "HypeSquad Event Member,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.Partner) ? "Discord Partner Server Owner,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.Staff) ? "Discord Employee,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.System) ? "Discord System,\n" : "");
+                        String.Concat(flagList, userProperties.HasFlag(UserProperties.VerifiedBot) ? "Verified Bot,\n" : "");
+                        emb.AddField("Public Flags", flagList);
+                    }
+
+                    message.Channel.SendMessageAsync(null, false, emb.Build(), null, null, message.Reference);
                 }
 
             }
