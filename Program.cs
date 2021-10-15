@@ -61,7 +61,7 @@ namespace Medea
             {
                 message.Channel.SendMessageAsync($@"Your account was created at {message.Author.CreatedAt.DateTime.Date}");
             }
-            else if (command.Equals("info") || command.Equals("user") || command.Equals("userinfo"))
+            else if (command.Equals("user") || command.Equals("userinfo"))
             {
                 if (message.MentionedUsers.Count > 0)
                 {
