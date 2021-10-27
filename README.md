@@ -1,6 +1,8 @@
 ![Travis (.com)](https://img.shields.io/travis/com/hermaplusplus/Medea?style=for-the-badge) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/hermaplusplus/Medea?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/hermaplusplus/Medea?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/hermaplusplus/Medea?style=for-the-badge)
 # Medea - WIP Discord Bot
 
+Add the officially run bot to a server where you have the `MANAGE_GUILD` permission by [clicking here](https://discord.com/oauth2/authorize?client_id=891034672866398239&scope=bot&permissions=8)!
+
 ## Installation
 
 1. Install the .NET 3.1 SDK (including the runtime)
