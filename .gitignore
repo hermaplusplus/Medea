@@ -608,3 +608,4 @@ obj/
 # End of https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,visualstudio,visualstudiocode
 
 token.txt
+sql.txt
