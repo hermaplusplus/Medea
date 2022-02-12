@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
+using MySql.Data;
 
 namespace Medea
 {
